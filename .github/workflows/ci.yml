@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  typescript:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24   # the lockfile was generated with npm 11 (Node 24)
+          cache: npm
+      - run: npm ci
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Web bundles are reproducible
+        run: |
+          npm run build:web
+          git diff --exit-code site/grader.js site/launcher.js
+
+  sale-program:
+    name: Sale program (cargo build-sbf + cargo test)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: sale
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache cargo and Solana tools
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ~/.cache/solana
+            ~/.local/share/solana
+            sale/target
+          key: sale-${{ runner.os }}-${{ hashFiles('sale/Cargo.lock', 'sale/rust-toolchain.toml') }}
+      - name: Install Solana CLI 3.1.10 (provides cargo build-sbf)
+        run: |
+          if [ ! -x "$HOME/.local/share/solana/install/active_release/bin/cargo-build-sbf" ]; then
+            sh -c "$(curl -sSfL https://release.anza.xyz/v3.1.10/install)"
+          fi
+          echo "$HOME/.local/share/solana/install/active_release/bin" >> "$GITHUB_PATH"
+      - name: Build the program (the tests load the built .so into LiteSVM)
+        run: cargo build-sbf
+      - name: Test
+        run: cargo test
