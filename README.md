@@ -28,6 +28,8 @@ npm run typecheck        # TypeScript
 npm run build:web        # rebuild site/grader.js and site/launcher.js
 ```
 
+CI runs all three on every push: the typecheck, a byte-for-byte rebuild of the web bundles, and the sale program's 92 tests (including a property-based invariant test) after a real `cargo build-sbf`.
+
 The Rust program builds and tests inside WSL or Linux with the Solana toolchain (`sale/run-tests.sh` runs `cargo build-sbf` then `cargo test`; the integration tests load the built program into LiteSVM). See `docs/TOOLCHAIN-2026-08-07.md`.
 
 ---
