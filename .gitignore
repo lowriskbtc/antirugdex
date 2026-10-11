@@ -1,0 +1,26 @@
+node_modules/
+.env
+*.json.key
+deployer*.json
+treasury*.json
+# The sale program's on-chain IDENTITY. It lives in WSL at sale/target/deploy/ and belongs
+# wherever secrets go — but a backup copied into this tree must never be committed, and the
+# Windows half is not under git yet, so this line is here before the git init rather than
+# after it. Losing it means the deployed program can never be upgraded; committing it means
+# anyone can upgrade it.
+*keypair*.json
+mint.devnet.json
+# Throwaway signer for Arweave uploads. Never funded and never the project wallet, but it
+# is still an unencrypted secret key.
+arweave-uploader.json
+# Devnet throwaway bidder keys — unencrypted, devnet-only, but keys all the same.
+bidders.devnet/
+# arweave-receipts.json is public tx ids and IS worth committing — do not ignore it.
+# mint.mainnet.json is just the public mint address — worth committing.
+
+# Anchor / Rust build output. sale/target/deploy/sale-keypair.json is the program's
+# upgrade identity: it must never be committed.
+sale/target/
+sale/.anchor/
+sale/test-ledger/
+*.so

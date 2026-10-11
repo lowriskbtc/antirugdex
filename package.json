@@ -1,0 +1,36 @@
+{
+  "name": "antirugdex-token",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "ARD — Token-2022 mint with a locked 0.25% transfer fee",
+  "scripts": {
+    "preflight": "tsx src/00-preflight.ts",
+    "create": "tsx src/01-create-mint.ts",
+    "verify": "tsx src/02-verify.ts",
+    "test-tax": "tsx src/03-test-tax.ts",
+    "harvest": "tsx src/04-harvest.ts",
+    "lock": "tsx src/05-lock-down.ts",
+    "sale-status": "tsx src/10-sale-status.ts",
+    "sync-idl": "tsx src/_sync-idl.ts",
+    "typecheck": "tsc --noEmit",
+    "build:web": "node web/build.mjs",
+    "build:web:watch": "node web/build.mjs --watch"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@raydium-io/raydium-sdk-v2": "^0.2.60-alpha",
+    "@solana/spl-token": "^0.4.15",
+    "@solana/spl-token-metadata": "^0.1.6",
+    "@solana/web3.js": "^1.98.4",
+    "dotenv": "^17.4.2"
+  },
+  "devDependencies": {
+    "@ardrive/turbo-sdk": "^1.42.0",
+    "@types/bn.js": "^5.2.0",
+    "@types/node": "^26.1.2",
+    "tsx": "^4.23.8",
+    "typescript": "^7.0.2",
+    "esbuild": "^0.28.1"
+  }
+}

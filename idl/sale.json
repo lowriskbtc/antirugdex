@@ -1,0 +1,1587 @@
+{
+  "address": "51zNMfwD1ExHuWBPgT94jQfThaqBnnFbGMecH4AzfjWz",
+  "metadata": {
+    "name": "sale",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "bid",
+      "docs": [
+        "Phase 1. Irrevocable deposit. There is no withdraw instruction, by design."
+      ],
+      "discriminator": [
+        199,
+        56,
+        85,
+        38,
+        146,
+        243,
+        37,
+        158
+      ],
+      "accounts": [
+        {
+          "name": "bidder",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "sale",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  97,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "sale.token_mint",
+                "account": "Sale"
+              }
+            ]
+          }
+        },
+        {
+          "name": "commitment",
+          "docs": [
+            "Accumulates across repeat bids from the same wallet. Splitting a bid across many",
+            "wallets and concentrating it in one are worth exactly the same — that is the",
+            "point of pro-rata, and it is why no per-wallet cap exists here."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  109,
+                  109,
+                  105,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "sale"
+              },
+              {
+                "kind": "account",
+                "path": "bidder"
+              }
+            ]
+          }
+        },
+        {
+          "name": "sol_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  111,
+                  108,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "sale"
+              }
+            ]
+          }
+        },
+        {
+          "name": "jito_dont_front",
+          "docs": [
+            "entire mechanism; see `JITO_DONT_FRONT`."
+          ],
+          "address": "jitodontfront111111111111111111111111111111"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "burn_unsold",
+      "docs": [
+        "Phase 4. Permissionless. Burns the supply nobody bought, which is otherwise locked",
+        "in the vault forever."
+      ],
+      "discriminator": [
+        129,
+        115,
+        92,
+        111,
+        174,
+        198,
+        99,
+        3
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "docs": [
+            "Anyone. Pays the fee and receives nothing."
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "sale",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  97,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "sale.token_mint",
+                "account": "Sale"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_mint",
+          "writable": true
+        },
+        {
+          "name": "token_vault",
+          "writable": true
+        },
+        {
+          "name": "token_program"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "claim",
+      "docs": [
+        "Phase 3. Tokens plus any pro-rata excess, on a Succeeded sale. Bidder signs."
+      ],
+      "discriminator": [
+        62,
+        198,
+        214,
+        193,
+        213,
+        159,
+        108,
+        210
+      ],
+      "accounts": [
+        {
+          "name": "bidder",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "sale",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  97,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "sale.token_mint",
+                "account": "Sale"
+              }
+            ]
+          }
+        },
+        {
+          "name": "commitment",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  109,
+                  109,
+                  105,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "sale"
+              },
+              {
+                "kind": "account",
+                "path": "bidder"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_mint"
+        },
+        {
+          "name": "token_vault",
+          "writable": true
+        },
+        {
+          "name": "bidder_token_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "bidder"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "token_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "sol_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  111,
+                  108,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "sale"
+              }
+            ]
+          }
+        },
+        {
+          "name": "jito_dont_front",
+          "address": "jitodontfront111111111111111111111111111111"
+        },
+        {
+          "name": "instructions_sysvar",
+          "address": "Sysvar1nstructions1111111111111111111111111"
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "fail_on_missing_pool",
+      "docs": [
+        "Permissionless recovery: no pool by `pool_deadline` means every claim refunds."
+      ],
+      "discriminator": [
+        21,
+        29,
+        66,
+        107,
+        38,
+        44,
+        144,
+        46
+      ],
+      "accounts": [
+        {
+          "name": "sale",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  97,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "sale.token_mint",
+                "account": "Sale"
+              }
+            ]
+          }
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "finalize",
+      "docs": [
+        "Phase 2. Permissionless. Freezes `total_committed` and settles against the floor."
+      ],
+      "discriminator": [
+        171,
+        61,
+        218,
+        56,
+        127,
+        115,
+        12,
+        217
+      ],
+      "accounts": [
+        {
+          "name": "sale",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  97,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "sale.token_mint",
+                "account": "Sale"
+              }
+            ]
+          }
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initialize_sale",
+      "docs": [
+        "Phase 0. Verifies the vault is safe, records the terms, opens bidding."
+      ],
+      "discriminator": [
+        208,
+        103,
+        34,
+        154,
+        179,
+        6,
+        125,
+        208
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "sale",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  97,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_mint"
+        },
+        {
+          "name": "token_vault",
+          "docs": [
+            "The tokens being sold. Funded *before* this instruction runs; this instruction's",
+            "job is to verify it, not to trust it."
+          ]
+        },
+        {
+          "name": "sol_vault",
+          "docs": [
+            "The single shared SOL vault: a system-owned PDA. Never created here — bidders'",
+            "transfers fund it, and the program signs with these seeds to move SOL out.",
+            "Seeded to rent-exempt minimum below so it cannot be reaped."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  111,
+                  108,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "sale"
+              }
+            ]
+          }
+        },
+        {
+          "name": "seed_destination",
+          "docs": [
+            "Where proceeds may go, and nowhere else. Recorded now so it is publicly readable",
+            "before the first bid."
+          ]
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "params",
+          "type": {
+            "defined": {
+              "name": "SaleParams"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "mark_pool_created",
+      "docs": [
+        "Permissionless. Proves the pool exists and its LP is burned; unblocks claims."
+      ],
+      "discriminator": [
+        38,
+        189,
+        191,
+        68,
+        131,
+        40,
+        61,
+        117
+      ],
+      "accounts": [
+        {
+          "name": "sale",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  97,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "sale.token_mint",
+                "account": "Sale"
+              }
+            ]
+          }
+        },
+        {
+          "name": "pool"
+        },
+        {
+          "name": "lp_mint",
+          "docs": [
+            "The pool's LP mint. Its `supply` is the only trustworthy evidence of a burn."
+          ]
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "refund",
+      "docs": [
+        "Phase 3, the recovery half. Full principal on a Failed sale. **Permissionless**,",
+        "and deliberately free of the allocation math — see the module docs on `claim.rs`."
+      ],
+      "discriminator": [
+        2,
+        96,
+        183,
+        251,
+        63,
+        208,
+        46,
+        46
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "docs": [
+            "Anyone. Pays the fee and receives nothing."
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "bidder",
+          "docs": [
+            "again in the handler. Receives the lamports; never signs."
+          ],
+          "writable": true
+        },
+        {
+          "name": "sale",
+          "docs": [
+            "Not `mut`. `refund` never writes the sale account, so refunds do not queue behind",
+            "one write lock and a bug in the claim bookkeeping cannot reach principal."
+          ],
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  97,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "sale.token_mint",
+                "account": "Sale"
+              }
+            ]
+          }
+        },
+        {
+          "name": "commitment",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  109,
+                  109,
+                  105,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "sale"
+              },
+              {
+                "kind": "account",
+                "path": "bidder"
+              }
+            ]
+          }
+        },
+        {
+          "name": "sol_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  111,
+                  108,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "sale"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "sweep_proceeds",
+      "docs": [
+        "Phase 4. Permissionless. Moves the raise to the pre-committed `seed_destination`.",
+        "**Gated on `pool_created`** — without that gate it destroys bidder principal."
+      ],
+      "discriminator": [
+        154,
+        245,
+        98,
+        195,
+        215,
+        5,
+        43,
+        232
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "docs": [
+            "Anyone. Pays the fee and receives nothing."
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "sale",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  97,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "sale.token_mint",
+                "account": "Sale"
+              }
+            ]
+          }
+        },
+        {
+          "name": "seed_destination",
+          "docs": [
+            "verified about it, and nothing else needs to be — it was published in advance."
+          ],
+          "writable": true
+        },
+        {
+          "name": "sol_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  111,
+                  108,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "sale"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Commitment",
+      "discriminator": [
+        61,
+        112,
+        129,
+        128,
+        24,
+        147,
+        77,
+        87
+      ]
+    },
+    {
+      "name": "Sale",
+      "discriminator": [
+        202,
+        64,
+        232,
+        171,
+        178,
+        172,
+        34,
+        183
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "VaultNotProgramOwned",
+      "msg": "Token vault is not owned by the sale PDA"
+    },
+    {
+      "code": 6001,
+      "name": "VaultHasDelegate",
+      "msg": "Token vault has a delegate; it could be drained mid-sale"
+    },
+    {
+      "code": 6002,
+      "name": "VaultHasCloseAuthority",
+      "msg": "Token vault has a close authority; it could be closed mid-sale"
+    },
+    {
+      "code": 6003,
+      "name": "VaultFrozen",
+      "msg": "Token vault is frozen"
+    },
+    {
+      "code": 6004,
+      "name": "VaultMintMismatch",
+      "msg": "Token vault mint does not match the sale mint"
+    },
+    {
+      "code": 6005,
+      "name": "VaultUnderfunded",
+      "msg": "Token vault spendable balance is below the declared supply for sale"
+    },
+    {
+      "code": 6006,
+      "name": "MintHasPermanentDelegate",
+      "msg": "Mint has a permanent delegate, which can move tokens out of any account"
+    },
+    {
+      "code": 6007,
+      "name": "MintHasTransferHook",
+      "msg": "Mint has a transfer hook, which can block or divert claims"
+    },
+    {
+      "code": 6008,
+      "name": "MintHasCloseAuthority",
+      "msg": "Mint has a close authority"
+    },
+    {
+      "code": 6009,
+      "name": "ZeroSupply",
+      "msg": "Supply for sale must be greater than zero"
+    },
+    {
+      "code": 6010,
+      "name": "ZeroPrice",
+      "msg": "Price must be greater than zero"
+    },
+    {
+      "code": 6011,
+      "name": "ZeroHardCap",
+      "msg": "Hard cap must be greater than zero"
+    },
+    {
+      "code": 6012,
+      "name": "ZeroMinBid",
+      "msg": "Minimum bid must be greater than zero"
+    },
+    {
+      "code": 6013,
+      "name": "ZeroFloor",
+      "msg": "Minimum floor must be greater than zero, or it can never bind"
+    },
+    {
+      "code": 6014,
+      "name": "FloorAboveCap",
+      "msg": "Minimum floor cannot exceed the hard cap"
+    },
+    {
+      "code": 6015,
+      "name": "MinBidAboveCap",
+      "msg": "Minimum bid cannot exceed the hard cap"
+    },
+    {
+      "code": 6016,
+      "name": "CapExceedsSupplyValue",
+      "msg": "Hard cap exceeds what the supply can cover at this price"
+    },
+    {
+      "code": 6017,
+      "name": "CloseInPast",
+      "msg": "Close timestamp must be in the future"
+    },
+    {
+      "code": 6018,
+      "name": "DeadlineBeforeClose",
+      "msg": "Absolute deadline must be at or after the close timestamp"
+    },
+    {
+      "code": 6019,
+      "name": "PoolDeadlineTooEarly",
+      "msg": "Pool deadline must be after the absolute deadline"
+    },
+    {
+      "code": 6020,
+      "name": "ExtensionWindowTooTight",
+      "msg": "Absolute deadline leaves no room for even one extension"
+    },
+    {
+      "code": 6021,
+      "name": "SaleNotBidding",
+      "msg": "Sale is not accepting bids"
+    },
+    {
+      "code": 6022,
+      "name": "BiddingClosed",
+      "msg": "Bidding has closed"
+    },
+    {
+      "code": 6023,
+      "name": "BidBelowMinimum",
+      "msg": "Bid is below the minimum"
+    },
+    {
+      "code": 6024,
+      "name": "MissingJitoMarker",
+      "msg": "Missing the jitodontfront marker account"
+    },
+    {
+      "code": 6025,
+      "name": "SaleStillOpen",
+      "msg": "Bidding is still open"
+    },
+    {
+      "code": 6026,
+      "name": "SaleAlreadyFinalized",
+      "msg": "Sale has already been finalized"
+    },
+    {
+      "code": 6027,
+      "name": "PoolDeadlineNotReached",
+      "msg": "Pool deadline has not been reached"
+    },
+    {
+      "code": 6028,
+      "name": "PoolAlreadyCreated",
+      "msg": "Pool has already been created"
+    },
+    {
+      "code": 6029,
+      "name": "SaleNotSucceeded",
+      "msg": "Sale did not succeed"
+    },
+    {
+      "code": 6030,
+      "name": "PoolWrongOwner",
+      "msg": "Pool account is not owned by the Raydium CPMM program"
+    },
+    {
+      "code": 6031,
+      "name": "PoolNotPoolState",
+      "msg": "Pool account is not a PoolState (bad discriminator or length)"
+    },
+    {
+      "code": 6032,
+      "name": "PoolMintMismatch",
+      "msg": "Pool does not trade the sale's token"
+    },
+    {
+      "code": 6033,
+      "name": "PoolLpMintMismatch",
+      "msg": "LP mint account does not match the pool's lp_mint"
+    },
+    {
+      "code": 6034,
+      "name": "LpNotBurned",
+      "msg": "LP tokens are not fully burned"
+    },
+    {
+      "code": 6035,
+      "name": "PoolDeadlinePassed",
+      "msg": "Pool deadline has already passed; only refunds remain"
+    },
+    {
+      "code": 6036,
+      "name": "PoolWrongCreator",
+      "msg": "Pool was not created by the sale authority"
+    },
+    {
+      "code": 6037,
+      "name": "PoolOpensTooLate",
+      "msg": "Pool open_time is later than the pool deadline; it would block claims"
+    },
+    {
+      "code": 6038,
+      "name": "AlreadyClaimed",
+      "msg": "This commitment has already been settled"
+    },
+    {
+      "code": 6039,
+      "name": "PoolNotCreated",
+      "msg": "No pool has been proven yet"
+    },
+    {
+      "code": 6040,
+      "name": "ClaimsNotOpen",
+      "msg": "Claims do not open until the pool starts trading"
+    },
+    {
+      "code": 6041,
+      "name": "SaleNotFailed",
+      "msg": "Sale has not failed; use claim instead"
+    },
+    {
+      "code": 6042,
+      "name": "NothingToClaim",
+      "msg": "Commitment is empty"
+    },
+    {
+      "code": 6043,
+      "name": "NoCommitments",
+      "msg": "Sale recorded no commitments at all"
+    },
+    {
+      "code": 6044,
+      "name": "BidderMismatch",
+      "msg": "Bidder account does not match the commitment"
+    },
+    {
+      "code": 6045,
+      "name": "NotTopLevel",
+      "msg": "This instruction must be top-level, not invoked by another program"
+    },
+    {
+      "code": 6046,
+      "name": "MultipleOwnInstructions",
+      "msg": "Only one instruction per transaction may target this program"
+    },
+    {
+      "code": 6047,
+      "name": "MalformedInstructionsSysvar",
+      "msg": "Instructions sysvar is malformed"
+    },
+    {
+      "code": 6048,
+      "name": "VaultBelowRentReserve",
+      "msg": "Payout would take the SOL vault below its rent reserve"
+    },
+    {
+      "code": 6049,
+      "name": "SupplyExceeded",
+      "msg": "Allocation would exceed the supply for sale"
+    },
+    {
+      "code": 6050,
+      "name": "WrongSeedDestination",
+      "msg": "Destination is not the pre-committed seed destination"
+    },
+    {
+      "code": 6051,
+      "name": "NothingToSweep",
+      "msg": "Nothing further is sweepable yet"
+    },
+    {
+      "code": 6052,
+      "name": "SweepBeforePool",
+      "msg": "Proceeds cannot be swept until a pool has been proven"
+    },
+    {
+      "code": 6053,
+      "name": "ClaimsOutstanding",
+      "msg": "Not every commitment has been claimed yet"
+    },
+    {
+      "code": 6054,
+      "name": "AlreadyBurned",
+      "msg": "The unsold remainder has already been burned"
+    },
+    {
+      "code": 6055,
+      "name": "NothingToBurn",
+      "msg": "There is no unsold remainder to burn"
+    },
+    {
+      "code": 6056,
+      "name": "Overflow",
+      "msg": "Arithmetic overflow"
+    }
+  ],
+  "types": [
+    {
+      "name": "Commitment",
+      "docs": [
+        "One per bidder, at [\"commit\", sale, bidder]. Every per-bidder decision lives here, so a",
+        "claimer needs only this account, the frozen totals, and a constant — no merkle root and",
+        "no settlement authority that could strand principal.",
+        "",
+        "`refund` writes only this account and the SOL vault; it never touches `Sale`. That keeps",
+        "the principal-recovery path independent of the allocation bookkeeping, and it lets",
+        "refunds run in parallel instead of queueing on one write lock."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "sale",
+            "type": "pubkey"
+          },
+          {
+            "name": "bidder",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "docs": [
+              "Total lamports committed. Accumulates across repeat bids. Irrevocable."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "tokens_claimed",
+            "docs": [
+              "Tokens received. Set once."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "lamports_refunded",
+            "docs": [
+              "Lamports refunded (excess above the cap, or the full amount if Failed). Set once."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "claimed",
+            "type": "bool"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Sale",
+      "docs": [
+        "One per token mint. Written at initialize, frozen in shape thereafter.",
+        "",
+        "Everything a claimer needs is here plus their own `Commitment`: pro-rata is a fold, so",
+        "there is no merkle root and no settlement authority that could strand principal."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "docs": [
+              "Funds the sale and seeds the pool afterwards. Holds no power over bidder principal."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "token_mint",
+            "docs": [
+              "The token being sold."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "token_vault",
+            "docs": [
+              "Program-owned token account holding the tokens. Verified in Phase 0."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "sol_vault",
+            "docs": [
+              "The single shared SOL vault PDA."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "seed_destination",
+            "docs": [
+              "Where proceeds may go, and nowhere else. Pre-committed and publicly readable",
+              "before anyone bids — this is the account that makes \"the builder cannot redirect",
+              "your SOL\" checkable rather than promised."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "price_lamports",
+            "docs": [
+              "Lamports per whole token (per 10^decimals base units)."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "supply_for_sale",
+            "docs": [
+              "Base units of the token available. Never exceeds the vault's spendable balance."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "hard_cap_lamports",
+            "docs": [
+              "Lamports. Commitments above this are refunded pro-rata."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "floor_lamports",
+            "docs": [
+              "Lamports. Below this at close the sale Fails and everyone refunds in full."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "min_bid_lamports",
+            "docs": [
+              "Lamports. Dust-griefing deterrent; the real cost to an attacker is the lockup."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "total_committed",
+            "docs": [
+              "Frozen at finalize. Until then it only grows."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "total_claimed_tokens",
+            "docs": [
+              "Bookkeeping for the invariant `sum(alloc) <= supply_for_sale`."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "total_accepted_lamports",
+            "docs": [
+              "Lamports actually kept from settled commitments — the sum of `accepted_i`, which is",
+              "what `sweep_proceeds` is allowed to move.",
+              "",
+              "**Not `hard_cap_lamports`, and the difference is not zero.** Oversubscribed,",
+              "`accepted_i = floor(c_i * cap / C)` and flooring loses up to one lamport per bidder,",
+              "so `sum(accepted_i)` lands *below* the cap by up to N-1 lamports. Sweeping the cap",
+              "instead would leave the last refunder's transaction short — the same failure mode as",
+              "over-allocating tokens, transposed onto principal. Recorded here at settle time so a",
+              "sweep never has to infer it. It is also why `sweep_proceeds` must run after claims,",
+              "or move only what has been recorded so far."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "claim_count",
+            "docs": [
+              "How many bidders have claimed tokens. Deliberately not incremented by `refund`,",
+              "which does not write this account at all.",
+              "",
+              "Load-bearing in exactly one place: `burn_unsold` requires",
+              "`claim_count == commitment_count`, because until then the unsold remainder is not",
+              "distinguishable from tokens someone is still owed."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "commitment_count",
+            "docs": [
+              "Distinct `Commitment` accounts ever created, incremented by `bid` on first creation.",
+              "",
+              "Two uses, both of which need a count rather than a sum:",
+              "1. `sweep_proceeds` before claims settle. Oversubscribed, the sale retains",
+              "`sum(floor(c_i * cap / C))`, which is not computable without iterating every",
+              "commitment — but flooring loses under one lamport each, so it is strictly greater",
+              "than `cap - commitment_count`. That bound is safe at any time, including before",
+              "the first claim, which is when the sweep actually has to run.",
+              "2. `burn_unsold`, as the definition of \"everyone has claimed\"."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "open_ts",
+            "type": "i64"
+          },
+          {
+            "name": "close_ts",
+            "docs": [
+              "Extends on late activity, capped by `MAX_EXTENSIONS` and `absolute_deadline`."
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "absolute_deadline",
+            "docs": [
+              "`close_ts` can never pass this, however much late activity there is."
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "pool_deadline",
+            "docs": [
+              "If the pool does not exist by here, claims flip permissionlessly to full refund.",
+              "This is what turns \"the builder disappeared\" into self-executing recovery."
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "extension_count",
+            "type": "u16"
+          },
+          {
+            "name": "status",
+            "type": {
+              "defined": {
+                "name": "SaleStatus"
+              }
+            }
+          },
+          {
+            "name": "pool_created",
+            "docs": [
+              "Set once the pool has been created and seeded.",
+              "",
+              "**INVARIANT — both halves required, and `claim` owns the second one:**",
+              "1. `fail_on_missing_pool` may flip a sale to `Failed` only while `!pool_created`.",
+              "2. `claim` MUST `require!(sale.pool_created)`.",
+              "",
+              "Together these make the two states mutually exclusive, so a sale can never flip to",
+              "`Failed` after someone has already claimed tokens. Drop half 2 and the abandonment",
+              "path becomes a way for early claimers to keep tokens while everyone else refunds.",
+              "It also matches the launch sequence, where claims open only after trading is live."
+            ],
+            "type": "bool"
+          },
+          {
+            "name": "total_swept_lamports",
+            "docs": [
+              "Lamports already moved to `seed_destination`. A running total, not a flag, because",
+              "the sweep is re-callable: the amount it may safely move grows as claims settle."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "unsold_burned",
+            "docs": [
+              "Set once the unsold remainder has been burned. One shot — the burnable amount is a",
+              "function of state that does not change afterwards, so a flag is the only guard."
+            ],
+            "type": "bool"
+          },
+          {
+            "name": "pool",
+            "docs": [
+              "The verified Raydium CPMM pool. Default until `mark_pool_created` proves one."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "pool_open_time",
+            "docs": [
+              "The pool's `open_time`, copied from pool state once verified.",
+              "",
+              "**`claim` MUST require `now >= pool_open_time`.** Claims opening only after trading",
+              "is live is what makes the opening price safe: at the moment the pool goes live the",
+              "circulating float is zero, so nobody holds tokens to dump into an overpriced pool.",
+              "Reverse the order and opening high builds a sell-side snipe instead of preventing a",
+              "buy-side one. Enforcing it here makes that ordering a program rule rather than a",
+              "procedure someone has to follow correctly on launch day."
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "decimals",
+            "type": "u8"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "sol_vault_bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SaleParams",
+      "docs": [
+        "Everything the sale needs, decided before anyone may bid.",
+        "",
+        "The four numbers (price, cap, floor, window) are parameters, not constants — they are",
+        "still undecided at the time of writing and do not block the mechanism."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "price_lamports",
+            "type": "u64"
+          },
+          {
+            "name": "supply_for_sale",
+            "type": "u64"
+          },
+          {
+            "name": "hard_cap_lamports",
+            "type": "u64"
+          },
+          {
+            "name": "floor_lamports",
+            "type": "u64"
+          },
+          {
+            "name": "min_bid_lamports",
+            "type": "u64"
+          },
+          {
+            "name": "close_ts",
+            "type": "i64"
+          },
+          {
+            "name": "absolute_deadline",
+            "type": "i64"
+          },
+          {
+            "name": "pool_deadline",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SaleStatus",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Bidding"
+          },
+          {
+            "name": "Succeeded"
+          },
+          {
+            "name": "Failed"
+          }
+        ]
+      }
+    }
+  ],
+  "constants": [
+    {
+      "name": "COMMIT_SEED",
+      "docs": [
+        "PDA seed for a bidder's `Commitment`: [\"commit\", sale, bidder]."
+      ],
+      "type": "bytes",
+      "value": "[99, 111, 109, 109, 105, 116]"
+    },
+    {
+      "name": "EXTENSION_SECONDS",
+      "docs": [
+        "How far past `close_ts` a qualifying late bid pushes the close, in seconds."
+      ],
+      "type": "i64",
+      "value": "300"
+    },
+    {
+      "name": "EXTENSION_TRIGGER_SECONDS",
+      "docs": [
+        "A bid landing within this window before `close_ts` triggers an extension."
+      ],
+      "type": "i64",
+      "value": "300"
+    },
+    {
+      "name": "JITO_DONT_FRONT",
+      "docs": [
+        "Jito's anti-sandwich marker.",
+        "",
+        "Any pubkey whose base58 begins with `jitodontfront`, present in any instruction, makes",
+        "the Jito block engine reject a bundle unless this transaction sits at index 0. Padding",
+        "the prefix with `1`s yields exactly one valid 32-byte key, which is this one.",
+        "",
+        "**Honest scope:** this is anti-sandwich only, enforced off-chain by one block engine.",
+        "Transactions submitted directly to validators are not covered, and it prevents nothing",
+        "about bid ordering — which is worth zero here anyway, by design."
+      ],
+      "type": "pubkey",
+      "value": "jitodontfront111111111111111111111111111111"
+    },
+    {
+      "name": "MAX_EXTENSIONS",
+      "docs": [
+        "Hard ceiling on how many times late activity may push `close_ts` out.",
+        "",
+        "Without a cap an attacker controls the deadline indefinitely at minimum-bid cost.",
+        "The absolute deadline sits behind this as a second backstop."
+      ],
+      "type": "u16",
+      "value": "12"
+    },
+    {
+      "name": "RAYDIUM_CPMM_PROGRAM",
+      "docs": [
+        "Owner of a genuine CPMM pool account.",
+        "",
+        "**Both values are confirmed against live pools, not documentation.** A wrong program",
+        "id here is the easiest possible way to accept a counterfeit pool.",
+        "",
+        "- devnet: the `owner` of our own pool `6zKJcfz…`, read 2026-08-08",
+        "- mainnet: the `owner` of live pool `H1Kvn7XW1qh9BP9kKo2KZqz8Q6ZcppsJCsUDxJEvntav`,",
+        "read 2026-08-08 with `tools/verify-mainnet-cpmm.py`. That pool is 637 bytes with the",
+        "same discriminator, so the layout below holds on mainnet too."
+      ],
+      "type": "pubkey",
+      "value": "DRaycpLY18LhpbydsBWbVJtxpNv9oXPgjRSfpF2bWpYb"
+    },
+    {
+      "name": "SALE_SEED",
+      "docs": [
+        "PDA seed for the one `Sale` account per token mint."
+      ],
+      "type": "bytes",
+      "value": "[115, 97, 108, 101]"
+    },
+    {
+      "name": "SOL_VAULT_SEED",
+      "docs": [
+        "PDA seed for the single shared SOL vault: [\"sol_vault\", sale].",
+        "",
+        "One shared vault, not one per bidder. Per-bidder custody and decoupled refunds are",
+        "mutually exclusive, and per-bidder accounts would make pool seeding an N-account sweep."
+      ],
+      "type": "bytes",
+      "value": "[115, 111, 108, 95, 118, 97, 117, 108, 116]"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+skip_local_validator = true
+
+[toolchain]
+
+[features]
+resolution = true
+skip-lint = false
+
+[programs.localnet]
+sale = "51zNMfwD1ExHuWBPgT94jQfThaqBnnFbGMecH4AzfjWz"
+
+[programs.devnet]
+sale = "51zNMfwD1ExHuWBPgT94jQfThaqBnnFbGMecH4AzfjWz"
+
+# The wallet is the devnet deployer/treasury `A9h5uLS6…`, which lives in the Windows half
+# of the project. This records a PATH, never a key. It is also the upgrade authority of the
+# deployed program — GAMEPLAN §6.3 wants that timelocked before mainnet.
+#
+# ⚠️ Deploys built for devnet MUST be built with `--features devnet`, which swaps the
+# hardcoded Raydium CPMM program id. A default build is the mainnet artifact and would
+# reject every devnet pool. Use `anchor-build-devnet.sh`.
+[provider]
+cluster = "devnet"
+wallet = "../deployer-devnet.json"   # relative to sale/; the keypair file itself is git-ignored
+
+[scripts]
+test = "cargo test"
+
+[hooks]

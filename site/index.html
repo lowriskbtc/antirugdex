@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AntiRugDex — verifiable launches on Solana</title>
+<meta name="description" content="A Solana launchpad built to make bundling and sniping structurally expensive. Every claim is a chain query you can run yourself.">
+<link rel="icon" href="/token/ard.png">
+<meta property="og:title" content="AntiRugDex">
+<meta property="og:description" content="A Solana launchpad built to make bundling and sniping structurally expensive.">
+<meta property="og:image" content="https://antirugdex.com/token/ard.png">
+<style>
+  :root{
+    --bg:#0a0d12; --panel:#111620; --line:#1e2635;
+    --ink:#e8edf5; --muted:#8b98ad;
+    --a1:#2be08c; --a2:#14b8c4;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font:16px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:64px 24px 96px}
+  header{display:flex;align-items:center;gap:16px;margin-bottom:48px}
+  header img{width:56px;height:56px;border-radius:14px}
+  h1{font-size:28px;letter-spacing:-.02em;margin:0}
+  .tag{color:var(--muted);font-size:15px;margin:2px 0 0}
+  h2{
+    font-size:13px;text-transform:uppercase;letter-spacing:.12em;
+    color:var(--muted);font-weight:600;margin:48px 0 16px
+  }
+  .lede{font-size:19px;line-height:1.65}
+  .grad{
+    background:linear-gradient(100deg,var(--a1),var(--a2));
+    -webkit-background-clip:text;background-clip:text;color:transparent
+  }
+  .card{
+    background:var(--panel);border:1px solid var(--line);
+    border-radius:12px;padding:20px 22px;margin:12px 0
+  }
+  .card h3{margin:0 0 6px;font-size:16px}
+  .card p{margin:0;color:var(--muted);font-size:14.5px}
+  code,.mono{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:13.5px
+  }
+  pre{
+    background:var(--panel);border:1px solid var(--line);border-radius:10px;
+    padding:16px 18px;overflow-x:auto;margin:12px 0
+  }
+  pre code{color:var(--a1)}
+  .pending{
+    border-left:3px solid var(--a2);background:#0e141d;
+    padding:14px 18px;border-radius:0 10px 10px 0;color:var(--muted);font-size:14.5px
+  }
+  footer{
+    margin-top:64px;padding-top:24px;border-top:1px solid var(--line);
+    color:var(--muted);font-size:13.5px
+  }
+  a{color:var(--a2)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <img src="/token/ard.png" alt="">
+    <div>
+      <h1>AntiRugDex</h1>
+      <p class="tag">Verifiable launches on Solana</p>
+    </div>
+  </header>
+
+  <p class="lede">
+    A launchpad built to make bundling and sniping <span class="grad">structurally expensive</span>
+    rather than merely discouraged. Every safety claim here is a chain query you can run yourself.
+    Don't trust the copy on this page — read the mint account.
+  </p>
+
+  <h2>The ARD fee token</h2>
+  <p>
+    A 0.25% Token-2022 transfer fee funds the build. Three authorities are permanently revoked
+    at launch, which is what separates a locked fee from a promise:
+  </p>
+
+  <div class="card">
+    <h3>Mint authority — revoked</h3>
+    <p>The supply is fixed. No one can print more, including us.</p>
+  </div>
+  <div class="card">
+    <h3>Freeze authority — never set</h3>
+    <p>No account can be frozen. Your tokens cannot be immobilised.</p>
+  </div>
+  <div class="card">
+    <h3>Fee authority — revoked</h3>
+    <p>
+      The 0.25% is locked forever. Nobody can raise it toward 100% and turn the token
+      into a honeypot — the usual failure mode for a taxed token.
+    </p>
+  </div>
+
+  <p>
+    One authority stays live by design: <code>withdrawWithheldAuthority</code>, which collects
+    fees already withheld by the 0.25%. It cannot touch anyone's principal, mint supply, or change
+    the rate. Revoking it would make the fee uncollectable, not safer.
+  </p>
+
+  <h2>Verify it yourself</h2>
+  <div class="pending">
+    Mainnet mint not yet deployed. The address will appear here at launch — until then,
+    treat any &ldquo;ARD&rdquo; token you find as unrelated to this project.
+  </div>
+
+  <div class="card">
+    <h3><a href="/launch.html">Open the launcher &rarr;</a> <span style="font-size:12px;color:var(--muted);font-weight:400">devnet</span></h3>
+    <p>
+      Create a Token-2022 mint from your browser — supply fixed and mint authority revoked in
+      one transaction, freeze authority never set. It runs the same instruction builder the
+      command-line tool uses, and refuses to build against any chain but devnet, checked by
+      genesis hash rather than by a setting.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3><a href="/grade.html">Open the grader &rarr;</a></h3>
+    <p>
+      Paste any Solana mint — ours or anyone else's — and read what is actually deployed:
+      authorities, fee config and cap, the extensions most checklists skip, and holder
+      concentration. It runs in your browser against the chain, with no third-party API and
+      no pass/fail badge. Checks that could not run are flagged, never hidden.
+    </p>
+  </div>
+
+  <p>Or check it in one command — no need to take our word for anything:</p>
+  <pre><code>spl-token display &lt;MINT_ADDRESS&gt;</code></pre>
+  <p>
+    Look for <span class="mono">Mint authority: (not set)</span>,
+    <span class="mono">Freeze authority: (not set)</span>, and a transfer fee config whose
+    config authority is unset.
+  </p>
+
+  <footer>
+    Nothing here is investment advice. Crypto tokens can lose all their value.
+    Verify on-chain before interacting with any contract.
+  </footer>
+
+</div>
+</body>
+</html>

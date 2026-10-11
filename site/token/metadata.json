@@ -1,0 +1,15 @@
+{
+  "name": "AntiRugDex",
+  "symbol": "ARD",
+  "description": "Fee token for AntiRugDex — a Solana launchpad built to make bundling and sniping structurally expensive. 0.25% Token-2022 transfer fee. Do not take our word for the authority state: read it off the mint account yourself. Every claim on antirugdex.com is a chain query you can run.",
+  "image": "https://arweave.net/Uxq3lWkihOoFGy8ZmCIDGiq_wOs3ivjVfazJVj7AhpU",
+  "external_url": "https://antirugdex.com",
+  "attributes": [
+    { "trait_type": "Standard", "value": "Token-2022" },
+    { "trait_type": "Transfer fee", "value": "0.25% (25 bps, uncapped)" },
+    { "trait_type": "Authority state", "value": "Verify on-chain" }
+  ],
+  "extensions": {
+    "website": "https://antirugdex.com"
+  }
+}
